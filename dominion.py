@@ -8,30 +8,11 @@ Big:
 
 '''
 
-
-
-
-
-
 import cards
-import random 
-import math
-import copy
+from cards import Color
+from player import Player
 
-######################################
-# Add color and bold/underline to text
-######################################
-class color:
-   PURPLE = '\033[95m'
-   CYAN = '\033[96m'
-   DARKCYAN = '\033[36m'
-   BLUE = '\033[94m'
-   GREEN = '\033[92m'
-   YELLOW = '\033[93m'
-   RED = '\033[91m'
-   BOLD = '\033[1m'
-   UNDERLINE = '\033[4m'
-   END = '\033[0m'
+import random, math
 
 
 class Board():
@@ -56,8 +37,8 @@ class Board():
 
 	def display(self):
 		# Action Cards
-		print(color.BOLD + color.CYAN + 'Action Cards:' + color.END)
-		print(color.BOLD + color.BLUE + "Cost |     Card      | Left" + color.END)
+		print(Color.BOLD + Color.CYAN + 'Action Cards:' + Color.END)
+		print(Color.BOLD + Color.BLUE + "Cost |     Card      | Left" + Color.END)
 		i = 0
 		for card in self.action_cards:
 			print("{:^5}| {:^13} | {:^5}".format(card['cost'], card['name'], self.num_action_cards[i]))
@@ -65,8 +46,8 @@ class Board():
 		print()
 
 		# Treasure Cards
-		print(color.BOLD + color.YELLOW + 'Treasure Cards:' + color.END)
-		print(color.BOLD + color.BLUE + "Cost |  Card  | Value | Left" + color.END)
+		print(Color.BOLD + Color.YELLOW + 'Treasure Cards:' + Color.END)
+		print(Color.BOLD + Color.BLUE + "Cost |  Card  | Value | Left" + Color.END)
 		print("{:^5}| {:^6} | {:^5} | {:^5}".format(6, 'Gold', 3, self.num_gold))
 		print("{:^5}| {:^6} | {:^5} | {:^5}".format(3, 'Silver', 2, self.num_silver))
 		print("{:^5}| {:^6} | {:^5} | {:^5}".format(1, 'Copper', 0, self.num_copper))
@@ -74,65 +55,13 @@ class Board():
 
 
 		# Victory Cards
-		print(color.BOLD + color.GREEN + 'Victory Cards:' + color.END)
-		print(color.BOLD + color.BLUE + "Cost |     Card      | VP | Left" + color.END)
+		print(Color.BOLD + Color.GREEN + 'Victory Cards:' + Color.END)
+		print(Color.BOLD + Color.BLUE + "Cost |     Card      | VP | Left" + Color.END)
 		print("{:^5}| {:^13} | {:>2} | {:^5}".format(6, 'Province', 6, self.num_provinces))
 		print("{:^5}| {:^13} | {:>2} | {:^5}".format(6, 'Dutchy', 3, self.num_dutchies))
 		print("{:^5}| {:^13} | {:>2} | {:^5}".format(6, 'Estate', 1, self.num_estates))
 		print("{:^5}| {:^13} | {:^2} | {:^5}".format(6, 'Curse', -1, self.num_curses))
 		print()
-
-
-class Player():
-
-	def __init__(self):
-		self.discard_pile = []
-		
-		# Shuffle the draw pile
-		self.draw_pile = random.sample(['copper','copper','copper','copper','copper', \
-			'copper','copper','estate','estate','estate'], 10)
-		self.num_actions = 1
-		self.num_buys = 1
-		self.hand = self.draw_pile[:5]
-
-		self.draw_pile = self.draw_pile[5:]
-
-	def shuffle():
-		pass
-
-	def draw(num = 1):
-		if len(draw_pile) < num:
-			temp = draw_pile[:num]
-			shuffle_deck()
-			draw_pile.insert(0, temp)
-		self.hand = self.draw_pile[:num]
-		self.draw_pile = self.draw_pile[num:]
-
-	def buy(self):
-		pass
-
-	def reset(self):
-		self.num_actions = 1
-		self.num_buys = 1
-		self.discard_hand
-		#self.draw(5)
-
-	def display_hand(self):
-		print("Hand:")
-		for card in self.hand:
-			card_actual = cards.dictionary[card]
-			if card_actual['type'] == 'action':
-				print(color.CYAN + card_actual['name'] + color.END)
-			elif card_actual['type'] == 'treasure':
-				print(color.YELLOW + card_actual['name'] + " ${}".format(card_actual['value']) + color.END)
-			elif card_actual['type'] == 'victory':
-				print(color.GREEN + card_actual['name'] + color.END)
-			else:
-				print(card_actual['name'])
-		print()
-
-	def discard_hand(self):
-		pass
 
 
 
@@ -157,7 +86,7 @@ def main():
 	i_play_order = 0
 	while not game_done:
 		board.display()
-		print(color.RED + "Player {}'s turn".format(play_order[i_play_order]) + color.END)
+		print(Color.RED + "Player {}'s turn".format(play_order[i_play_order]) + Color.END)
 		current_player = players[play_order[i_play_order]-1]
 		current_player.display_hand()
 
@@ -199,13 +128,29 @@ def main():
 				if current_player.num_buys > 0:
 					# Calculate total money in hand
 					total_money = 0
+					treasure_in_hand = []
+
 					for card_key in current_player.hand:
 						if cards.get_type(card_key) == 'treasure':
 							total_money += cards.treasure[card_key]['value']
+							treasure_in_hand.append(cards.treasure[card_key])
 
+					print("Total treasure: ${}".format(total_money))
 					to_buy = input("Card to buy: ")
 					if to_buy in cards.dictionary:
-						pass
+						if cards.dictionary[to_buy]['cost'] > total_money:
+							print("Not enough treasure!")
+						else:
+							if cards.dictionary[to_buy]['cost'] == 0:
+								current_player.hand.append(to_buy)
+								current_player.num
+							confirm_purchase = False
+
+							while not confirm_purchase:
+								print("Treasure in hand:")
+								for i in range(len(treasure_in_hand)):
+									print("{}: {} ${}")
+
 					else:
 						print("Card not found")
 				else:
