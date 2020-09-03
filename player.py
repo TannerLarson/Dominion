@@ -34,7 +34,7 @@ class Player():
 		:type       to_buy:         String: 'moat' / 'province'
 		"""
 		self.alter_hand(treasure_used)
-		self.discard(treasure_used + to_buy)
+		self.discard(treasure_used.append(to_buy))
 		self.num_buys -= 1
 
 	def alter_hand(self, to_remove = [], to_add = None):
@@ -86,4 +86,5 @@ class Player():
 		:param      to_discard:  List of cards to send to discard pile
 		:type       to_discard:  List: [copper, copper, moat]
 		"""
-		self.discard_pile += to_discard
+		if to_discard is not None:
+			self.discard_pile += to_discard

@@ -7,97 +7,11 @@ Big:
 	GUI
 
 '''
-
-import cards
 from cards import Color
 from player import Player
+from board import Board
 
-import random, math
-
-
-class Board():
-
-	def __init__(self, num_players):
-		num_victory_cards = 4 + math.ceil(float(num_players) / 2) * 4
-		self.num_cards = {
-			'estate': num_victory_cards,
-			'dutchie': num_victory_cards,
-			'province': num_victory_cards,
-			'curse': (num_players - 1) * 10,
-			'copper': 60 - 7 * num_players,
-			'silver': 40,
-			'gold': 30,
-			'action': [10 for x in range(10)]
-		}
-		self.action_cards = []
-		# Get 10 random action cards for the board and sort them by price
-		action_list = random.sample(range(0, len(cards.action)), 10)
-		for x in action_list:
-			self.action_cards.append(cards.action[list(cards.action)[x]])
-		self.action_cards.sort(reverse=True, key=lambda e : e['cost'])
-
-	def take_card(self, to_take):
-		pass
-
-
-	def available_cards(self):
-		"""
-		Returns set of available cards
-
-		:returns:   set of available cards
-		:rtype:     Set: {'estate', 'dutchy', 'province', ...}
-		"""
-		available = set()
-		if self.num_cards['estate'] > 0:
-			available.add('estate')
-		if self.num_cards['dutchy'] > 0:
-			available.add('dutchy')
-		if self.num_cards['province'] > 0:
-			available.add('province')
-		if self.num_cards['curse'] > 0:
-			available.add('curse')
-		if self.num_cards['copper'] > 0:
-			available.add('copper')
-		if self.num_cards['silver'] > 0:
-			available.add('silver')
-		if self.num_cards['gold'] > 0:
-			available.add('gold')
-		for i in range(len(self.num_cards['action'])):
-			if self.num_action_cards[i] > 0:
-				available.add(self.action_cards[i]['name'].lower())
-		return(available)
-
-	def display(self):
-		"""
-		Displays the board
-		"""
-		# Action Cards
-		print(Color.BOLD + Color.CYAN + 'Action Cards:' + Color.END)
-		print(Color.BOLD + Color.BLUE + "Cost |     Card      | Left" + Color.END)
-		i = 0
-		for card in self.action_cards:
-			print("{:^5}| {:^13} | {:^5}".format(card['cost'], card['name'], self.num_cards['action'][i]))
-			i += 1
-		print()
-
-		# Treasure Cards
-		print(Color.BOLD + Color.YELLOW + 'Treasure Cards:' + Color.END)
-		print(Color.BOLD + Color.BLUE + "Cost |  Card  | Value | Left" + Color.END)
-		print("{:^5}| {:^6} | {:^5} | {:^5}".format(6, 'Gold', 3, self.num_cards['gold']))
-		print("{:^5}| {:^6} | {:^5} | {:^5}".format(3, 'Silver', 2, self.num_cards['silver']))
-		print("{:^5}| {:^6} | {:^5} | {:^5}".format(1, 'Copper', 0, self.num_cards['copper']))
-		print()
-
-
-		# Victory Cards
-		print(Color.BOLD + Color.GREEN + 'Victory Cards:' + Color.END)
-		print(Color.BOLD + Color.BLUE + "Cost |     Card      | VP | Left" + Color.END)
-		print("{:^5}| {:^13} | {:>2} | {:^5}".format(6, 'Province', 6, self.num_cards['province']))
-		print("{:^5}| {:^13} | {:>2} | {:^5}".format(6, 'Dutchy', 3, self.num_cards['dutchie']))
-		print("{:^5}| {:^13} | {:>2} | {:^5}".format(6, 'Estate', 1, self.num_cards['estate']))
-		print("{:^5}| {:^13} | {:^2} | {:^5}".format(6, 'Curse', -1, self.num_cards['curse']))
-		print()
-
+import random, cards
 
 
 def main():
@@ -217,6 +131,7 @@ def main():
 						confirm = input("Confirm purchase?(y,n): ")
 						if confirm == 'y':
 							current_player.buy(to_buy, treasure_used)
+							board.take_card(to_buy)
 
 					else:
 						print("Card not found")
