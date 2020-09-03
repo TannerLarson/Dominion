@@ -5,24 +5,45 @@ from cards import Color
 class Player():
 
 	def __init__(self):
-		self.discard_pile = []
-		
-		# Shuffle the draw pile
-		self.draw_pile = random.sample(['copper','copper','copper','copper','copper', \
-			'copper','copper','estate','estate','estate'], 10)
+		"""
+		Player constructor
+		"""
 		self.num_actions = 1
 		self.num_buys = 1
-		self.hand = self.draw_pile[:5]
+		self.discard_pile = []
 
+		self.draw_pile = ['copper','copper','copper','copper','copper', 
+			'copper','copper','estate','estate','estate'] # Last element in draw_pile list is the top of the deck
+		random.shuffle(self.draw_pile)
+		self.hand = self.draw_pile[:5]
 		self.draw_pile = self.draw_pile[5:]
 
-	def draw(num = 1):
-		if len(draw_pile) < num:
-			temp = draw_pile[:num]
-			shuffle_deck()
-			draw_pile.insert(0, temp)
-		self.hand = self.draw_pile[:num]
-		self.draw_pile = self.draw_pile[num:]
+	def draw(self, num = 1):
+		"""
+		Draw cards from the draw pile
+
+		:param      num:             Number of cards to draw
+		:type       num:             int: 3 / 5
+
+		:raises     AssertionError:  Draw pile must have cards in it
+		"""
+		for i in range(num):
+			assert len(self.draw_pile) > 0, "Can't draw from empty draw pile"
+			self.hand.append(self.draw_pile.pop())
+			if len(self.draw_pile) <= 0:
+				self.discard_to_draw()
+
+	def discard_to_draw(self):
+		"""
+		Shuffle discard pile and make it the deck
+
+		:raises     AssertionError:  Draw pile must be empty
+		"""
+		assert len(self.draw_pile) == 0, "Draw pile should be empty"
+		self.draw_pile = self.discard_pile
+		random.shuffle(self.draw_pile)
+		self.discard_pile = []
+		print(self.draw_pile)
 
 	def buy(self, to_buy, treasure_used = []):
 		"""
@@ -59,7 +80,9 @@ class Player():
 		"""
 		self.num_actions = 1
 		self.num_buys = 1
-		self.discard_hand
+		self.discard(self.hand)
+		self.hand = []
+		self.draw(5)
 		#self.draw(5)
 
 	def display_hand(self):
@@ -86,5 +109,6 @@ class Player():
 		:param      to_discard:  List of cards to send to discard pile
 		:type       to_discard:  List: [copper, copper, moat]
 		"""
+		print("discarding: {}".format(to_discard))
 		if to_discard is not None:
 			self.discard_pile += to_discard

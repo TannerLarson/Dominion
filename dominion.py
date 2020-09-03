@@ -15,6 +15,9 @@ import random, cards
 
 
 def main():
+	"""
+	Main game engine
+	"""
 
 	# Set up game
 	num_players = 2 #int(input("Number of players: "))
@@ -31,7 +34,8 @@ def main():
 
 	# Main game loop
 	game_done = False
-	play_order = random.sample([x for x in range(1,num_players+1)], num_players)
+	play_order = [x for x in range(1,num_players+1)]
+	random.shuffle(play_order)
 	i_play_order = 0
 	while not game_done:
 		board.display()
@@ -44,7 +48,8 @@ def main():
 			choice = None
 			while choice is None:
 				try:
-					choice = int(input('Choose an option:\n1. Show board\n2. Show hand\n3. Read action card description\n4. Use action ({} actions left)\n5. End action phase\n>> ' \
+					choice = int(input('Choose an option:\n1. Show board\n2. Show hand\n3. Read ' + Color.CYAN 
+					 	+ 'action' + Color.END + ' card description\n4. Use action ({} actions left)\n5. End action phase\n>> '
 						.format(current_player.num_actions)))
 					if not 0 < choice < 6:
 						choice = None
@@ -58,7 +63,13 @@ def main():
 				current_player.display_hand()
 			elif choice == 3:
 				card_to_read = input("Name of action card: ").lower()
-				cards.print_action_details(card_to_read)
+				if card_to_read in cards.dictionary:
+					if cards.dictionary[card_to_read]['type'] == 'action':
+						cards.print_action_details(card_to_read)
+					else:
+						print("Not an action card!")
+				else:
+					print("Card not found!")
 			elif choice == 4:
 				pass
 			elif choice == 5:
@@ -68,8 +79,9 @@ def main():
 
 		# Buy phase
 		while 1:
-			choice = int(input('Choose an option:\n1. Show board\n2. Show hand\n3. Read action card description\n4. Buy card ({} buys left)\n5. End turn\n>> ' \
-				.format(current_player.num_buys)))
+			choice = int(input('Choose an option:\n1. Show board\n2. Show hand\n3. Read ' + Color.CYAN 
+					 + 'action' + Color.END + ' card description\n4. Buy card ({} buys left)\n5. End turn\n>> '
+					 .format(current_player.num_buys)))
 			while not 0 < choice < 6:
 				choice = input("Please input a number: ")
 
