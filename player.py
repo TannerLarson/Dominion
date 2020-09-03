@@ -16,9 +16,6 @@ class Player():
 
 		self.draw_pile = self.draw_pile[5:]
 
-	def shuffle():
-		pass
-
 	def draw(num = 1):
 		if len(draw_pile) < num:
 			temp = draw_pile[:num]
@@ -27,8 +24,20 @@ class Player():
 		self.hand = self.draw_pile[:num]
 		self.draw_pile = self.draw_pile[num:]
 
-	def buy(self):
-		pass
+	def alter_hand(to_remove, to_add):
+		"""
+		Updates player hand with cards to add and remove
+		* TODO: Does not check if cards are in hand
+		
+		:param      to_remove:  List of cards to remove
+		:type       to_remove:  List: ['copper', 'silver', 'dutchy']
+		:param      to_add:     String of card to add
+		:type       to_add:     String: 'moat' / 'gold'
+		"""
+		for card in to_remove:
+			self.hand.remove(card)
+
+		self.hand.append(to_add)
 
 	def reset(self):
 		self.num_actions = 1

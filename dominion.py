@@ -35,7 +35,37 @@ class Board():
 			self.action_cards.append(cards.action[list(cards.action)[x]])
 		self.action_cards.sort(reverse=True, key=lambda e : e['cost'])
 
+	def available_cards(self):
+		"""
+		Returns set of available cards
+
+		:returns:   set of available cards
+		:rtype:     Set: {'estate', 'dutchy', 'province', ...}
+		"""
+		available = set()
+		if self.num_estates > 0:
+			available.add('estate')
+		if self.num_dutchies > 0:
+			available.add('dutchy')
+		if self.num_provinces > 0:
+			available.add('province')
+		if self.num_curses > 0:
+			available.add('curse')
+		if self.num_copper > 0:
+			available.add('copper')
+		if self.num_silver > 0:
+			available.add('silver')
+		if self.num_gold > 0:
+			available.add('gold')
+		for i in range(len(self.action_cards))
+			if self.num_action_cards[i] < 0:
+				available.add(self.action_cards[i]['name'])
+		return(available)
+
 	def display(self):
+		"""
+		Displays the board
+		"""
 		# Action Cards
 		print(Color.BOLD + Color.CYAN + 'Action Cards:' + Color.END)
 		print(Color.BOLD + Color.BLUE + "Cost |     Card      | Left" + Color.END)
@@ -98,6 +128,7 @@ def main():
 					choice = int(input('Choose an option:\n1. Show board\n2. Read action card description\n3. Use action ({} actions left)\n4. End action phase\n>> ' \
 						.format(current_player.num_actions)))
 					if not 0 < choice < 5:
+						choice = None
 						raise ValueError()
 				except ValueError:
 					print("ERROR: Please input a number between 1 and 5: ")
@@ -110,7 +141,9 @@ def main():
 			elif choice == 3:
 				pass
 			elif choice == 4:
+				print()
 				break
+			print()
 
 		# Buy phase
 		while 1:
@@ -130,33 +163,59 @@ def main():
 					total_money = 0
 					treasure_in_hand = []
 
+					# Compile list of treasures in hand
 					for card_key in current_player.hand:
 						if cards.get_type(card_key) == 'treasure':
 							total_money += cards.treasure[card_key]['value']
 							treasure_in_hand.append(cards.treasure[card_key])
 
-					print("Total treasure: ${}".format(total_money))
-					to_buy = input("Card to buy: ")
-					if to_buy in cards.dictionary:
+					# Buy card
+					print("Total treasure: " + Color.YELLOW + "${}".format(total_money) + Color.END)
+					to_buy = input("Card to buy: ").lower()
+					print(board.action_cards)
+					# If card is available
+					if to_buy in board.available_cards:
+						# Check if player has enough treasure to purchase
 						if cards.dictionary[to_buy]['cost'] > total_money:
-							print("Not enough treasure!")
-						else:
-							if cards.dictionary[to_buy]['cost'] == 0:
-								current_player.hand.append(to_buy)
-								current_player.num
-							confirm_purchase = False
+							print(Color.RED + "Not enough treasure!" + Color.END)
+							print()
+							continue
 
-							while not confirm_purchase:
-								print("Treasure in hand:")
-								for i in range(len(treasure_in_hand)):
-									print("{}: {} ${}")
+						# Select the treasures to use to purchase
+						needed_treasure = cards.dictionary[to_buy]['cost']
+						to_remove = []
+						while needed_treasure > 0:
+							print("Select the treasure you wish to use:")
+							for i in range(len(treasure_in_hand)):
+								print("{}: ".format(i+1) + Color.YELLOW + "{} ${}".format(treasure_in_hand[i]['name'], \
+								 treasure_in_hand[i]['value']) + Color.END)
+
+							to_spend = None
+							while to_spend is None:
+								try:
+									to_spend = int(input(">> "))
+									if 0 > to_spend > len(treasure_in_hand):
+										to_spend = None
+										raise ValueError
+								except ValueError:
+									print("Enter a valid choice")
+
+							needed_treasure -= treasure_in_hand[to_spend-1]['value']
+							to_remove.append(treasure_in_hand.pop(to_spend-1)['name'].lower())
+
+						confirm = input("Confirm purchase?(y,n): ")
+						if confirm == 'y':
+							for card in to_remove:
+								current_player.buy(to_remove, to_buy)
 
 					else:
 						print("Card not found")
 				else:
 					print("No buys left!")
 			elif choice == 4:
+				print()
 				break
+			print()
 
 		# Clean up
 		current_player.reset()
