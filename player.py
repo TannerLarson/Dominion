@@ -24,7 +24,20 @@ class Player():
 		self.hand = self.draw_pile[:num]
 		self.draw_pile = self.draw_pile[num:]
 
-	def alter_hand(to_remove, to_add):
+	def buy(self, to_buy, treasure_used = []):
+		"""
+		Updates player when buying a card
+
+		:param      treasure_used:  List of treasure used to buy card
+		:type       treasure_used:  List: [copper, copper, gold, silver]
+		:param      to_buy:         Card being bought
+		:type       to_buy:         String: 'moat' / 'province'
+		"""
+		self.alter_hand(treasure_used)
+		self.discard(treasure_used + to_buy)
+		self.num_buys -= 1
+
+	def alter_hand(self, to_remove = [], to_add = None):
 		"""
 		Updates player hand with cards to add and remove
 		* TODO: Does not check if cards are in hand
@@ -37,15 +50,22 @@ class Player():
 		for card in to_remove:
 			self.hand.remove(card)
 
-		self.hand.append(to_add)
+		if to_add is not None:
+			self.hand.append(to_add)
 
 	def reset(self):
+		"""
+		Reset data for player when their turn ends
+		"""
 		self.num_actions = 1
 		self.num_buys = 1
 		self.discard_hand
 		#self.draw(5)
 
 	def display_hand(self):
+		"""
+		Displays hand
+		"""
 		print("Hand:")
 		for card in self.hand:
 			card_actual = cards.dictionary[card]
@@ -59,5 +79,11 @@ class Player():
 				print(card_actual['name'])
 		print()
 
-	def discard_hand(self):
-		pass
+	def discard(self, to_discard):
+		"""
+		Send a card to player discard pile
+
+		:param      to_discard:  List of cards to send to discard pile
+		:type       to_discard:  List: [copper, copper, moat]
+		"""
+		self.discard_pile += to_discard

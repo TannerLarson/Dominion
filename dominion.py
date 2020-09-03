@@ -19,21 +19,26 @@ class Board():
 
 	def __init__(self, num_players):
 		num_victory_cards = 4 + math.ceil(float(num_players) / 2) * 4
-		self.num_estates = num_victory_cards
-		self.num_dutchies = num_victory_cards
-		self.num_provinces = num_victory_cards
-		self.num_curses = (num_players - 1) * 10
-		self.num_copper = 60 - 7 * num_players
-		self.num_silver = 40
-		self.num_gold = 30
+		self.num_cards = {
+			'estate': num_victory_cards,
+			'dutchie': num_victory_cards,
+			'province': num_victory_cards,
+			'curse': (num_players - 1) * 10,
+			'copper': 60 - 7 * num_players,
+			'silver': 40,
+			'gold': 30,
+			'action': [10 for x in range(10)]
+		}
 		self.action_cards = []
-		self.num_action_cards = [10 for x in range(10)]
-
 		# Get 10 random action cards for the board and sort them by price
 		action_list = random.sample(range(0, len(cards.action)), 10)
 		for x in action_list:
 			self.action_cards.append(cards.action[list(cards.action)[x]])
 		self.action_cards.sort(reverse=True, key=lambda e : e['cost'])
+
+	def take_card(self, to_take):
+		pass
+
 
 	def available_cards(self):
 		"""
@@ -43,23 +48,23 @@ class Board():
 		:rtype:     Set: {'estate', 'dutchy', 'province', ...}
 		"""
 		available = set()
-		if self.num_estates > 0:
+		if self.num_cards['estate'] > 0:
 			available.add('estate')
-		if self.num_dutchies > 0:
+		if self.num_cards['dutchy'] > 0:
 			available.add('dutchy')
-		if self.num_provinces > 0:
+		if self.num_cards['province'] > 0:
 			available.add('province')
-		if self.num_curses > 0:
+		if self.num_cards['curse'] > 0:
 			available.add('curse')
-		if self.num_copper > 0:
+		if self.num_cards['copper'] > 0:
 			available.add('copper')
-		if self.num_silver > 0:
+		if self.num_cards['silver'] > 0:
 			available.add('silver')
-		if self.num_gold > 0:
+		if self.num_cards['gold'] > 0:
 			available.add('gold')
-		for i in range(len(self.action_cards))
-			if self.num_action_cards[i] < 0:
-				available.add(self.action_cards[i]['name'])
+		for i in range(len(self.num_cards['action'])):
+			if self.num_action_cards[i] > 0:
+				available.add(self.action_cards[i]['name'].lower())
 		return(available)
 
 	def display(self):
@@ -71,26 +76,26 @@ class Board():
 		print(Color.BOLD + Color.BLUE + "Cost |     Card      | Left" + Color.END)
 		i = 0
 		for card in self.action_cards:
-			print("{:^5}| {:^13} | {:^5}".format(card['cost'], card['name'], self.num_action_cards[i]))
+			print("{:^5}| {:^13} | {:^5}".format(card['cost'], card['name'], self.num_cards['action'][i]))
 			i += 1
 		print()
 
 		# Treasure Cards
 		print(Color.BOLD + Color.YELLOW + 'Treasure Cards:' + Color.END)
 		print(Color.BOLD + Color.BLUE + "Cost |  Card  | Value | Left" + Color.END)
-		print("{:^5}| {:^6} | {:^5} | {:^5}".format(6, 'Gold', 3, self.num_gold))
-		print("{:^5}| {:^6} | {:^5} | {:^5}".format(3, 'Silver', 2, self.num_silver))
-		print("{:^5}| {:^6} | {:^5} | {:^5}".format(1, 'Copper', 0, self.num_copper))
+		print("{:^5}| {:^6} | {:^5} | {:^5}".format(6, 'Gold', 3, self.num_cards['gold']))
+		print("{:^5}| {:^6} | {:^5} | {:^5}".format(3, 'Silver', 2, self.num_cards['silver']))
+		print("{:^5}| {:^6} | {:^5} | {:^5}".format(1, 'Copper', 0, self.num_cards['copper']))
 		print()
 
 
 		# Victory Cards
 		print(Color.BOLD + Color.GREEN + 'Victory Cards:' + Color.END)
 		print(Color.BOLD + Color.BLUE + "Cost |     Card      | VP | Left" + Color.END)
-		print("{:^5}| {:^13} | {:>2} | {:^5}".format(6, 'Province', 6, self.num_provinces))
-		print("{:^5}| {:^13} | {:>2} | {:^5}".format(6, 'Dutchy', 3, self.num_dutchies))
-		print("{:^5}| {:^13} | {:>2} | {:^5}".format(6, 'Estate', 1, self.num_estates))
-		print("{:^5}| {:^13} | {:^2} | {:^5}".format(6, 'Curse', -1, self.num_curses))
+		print("{:^5}| {:^13} | {:>2} | {:^5}".format(6, 'Province', 6, self.num_cards['province']))
+		print("{:^5}| {:^13} | {:>2} | {:^5}".format(6, 'Dutchy', 3, self.num_cards['dutchie']))
+		print("{:^5}| {:^13} | {:>2} | {:^5}".format(6, 'Estate', 1, self.num_cards['estate']))
+		print("{:^5}| {:^13} | {:^2} | {:^5}".format(6, 'Curse', -1, self.num_cards['curse']))
 		print()
 
 
@@ -125,9 +130,9 @@ def main():
 			choice = None
 			while choice is None:
 				try:
-					choice = int(input('Choose an option:\n1. Show board\n2. Read action card description\n3. Use action ({} actions left)\n4. End action phase\n>> ' \
+					choice = int(input('Choose an option:\n1. Show board\n2. Show hand\n3. Read action card description\n4. Use action ({} actions left)\n5. End action phase\n>> ' \
 						.format(current_player.num_actions)))
-					if not 0 < choice < 5:
+					if not 0 < choice < 6:
 						choice = None
 						raise ValueError()
 				except ValueError:
@@ -136,28 +141,32 @@ def main():
 			if choice == 1:
 				board.display()
 			elif choice == 2:
+				current_player.display_hand()
+			elif choice == 3:
 				card_to_read = input("Name of action card: ").lower()
 				cards.print_action_details(card_to_read)
-			elif choice == 3:
-				pass
 			elif choice == 4:
+				pass
+			elif choice == 5:
 				print()
 				break
 			print()
 
 		# Buy phase
 		while 1:
-			choice = int(input('Choose an option:\n1. Show board\n2. Read action card description\n3. Buy card ({} buys left)\n4. End turn\n>> ' \
+			choice = int(input('Choose an option:\n1. Show board\n2. Show hand\n3. Read action card description\n4. Buy card ({} buys left)\n5. End turn\n>> ' \
 				.format(current_player.num_buys)))
-			while not 0 < choice < 5:
+			while not 0 < choice < 6:
 				choice = input("Please input a number: ")
 
 			if choice == 1:
 				board.display()
 			elif choice == 2:
+				current_player.display_hand()
+			elif choice == 3:
 				card_to_read = input("Name of action card: ").lower()
 				cards.print_action_details(card_to_read)
-			elif choice == 3:
+			elif choice == 4:
 				if current_player.num_buys > 0:
 					# Calculate total money in hand
 					total_money = 0
@@ -172,9 +181,8 @@ def main():
 					# Buy card
 					print("Total treasure: " + Color.YELLOW + "${}".format(total_money) + Color.END)
 					to_buy = input("Card to buy: ").lower()
-					print(board.action_cards)
 					# If card is available
-					if to_buy in board.available_cards:
+					if to_buy in board.available_cards():
 						# Check if player has enough treasure to purchase
 						if cards.dictionary[to_buy]['cost'] > total_money:
 							print(Color.RED + "Not enough treasure!" + Color.END)
@@ -183,13 +191,15 @@ def main():
 
 						# Select the treasures to use to purchase
 						needed_treasure = cards.dictionary[to_buy]['cost']
-						to_remove = []
+						treasure_used = []
 						while needed_treasure > 0:
+							print("Amount Owed: " + Color.YELLOW + "${}".format(needed_treasure) + Color.END)
 							print("Select the treasure you wish to use:")
 							for i in range(len(treasure_in_hand)):
 								print("{}: ".format(i+1) + Color.YELLOW + "{} ${}".format(treasure_in_hand[i]['name'], \
 								 treasure_in_hand[i]['value']) + Color.END)
 
+							# Select treasure to use
 							to_spend = None
 							while to_spend is None:
 								try:
@@ -201,18 +211,18 @@ def main():
 									print("Enter a valid choice")
 
 							needed_treasure -= treasure_in_hand[to_spend-1]['value']
-							to_remove.append(treasure_in_hand.pop(to_spend-1)['name'].lower())
+							treasure_used.append(treasure_in_hand.pop(to_spend-1)['name'].lower())
 
+						# Confirm purchase and update board and player discard
 						confirm = input("Confirm purchase?(y,n): ")
 						if confirm == 'y':
-							for card in to_remove:
-								current_player.buy(to_remove, to_buy)
+							current_player.buy(to_buy, treasure_used)
 
 					else:
 						print("Card not found")
 				else:
 					print("No buys left!")
-			elif choice == 4:
+			elif choice == 5:
 				print()
 				break
 			print()
