@@ -14,6 +14,12 @@ class Card():
 			self.buy = data['buy']
 
 def print_action_details(card_name):
+	"""
+	Prints details of an action card
+
+	:param      card_name:  The card name
+	:type       card_name:  String
+	"""
 	if card_name in dictionary:
 		print('\033[96m') # Make the card cyan
 		print("Name: {}".format(action[card_name]['name']))
@@ -329,6 +335,11 @@ action = {
 		'execute': ''
 	}
 }
+
+
+#################################################################
+# Big dicitionary with every card in it
+#################################################################
 
 
 dictionary = {

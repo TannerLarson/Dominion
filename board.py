@@ -5,6 +5,12 @@ from cards import Color
 class Board():
 
 	def __init__(self, num_players):
+		"""
+		Constructs a new board
+
+		:param      num_players:  The number of players (Currently can only be 2-4)
+		:type       num_players:  int
+		"""
 		num_victory_cards = 4 + math.ceil(float(num_players) / 2) * 4
 		self.num_cards = {
 			'estate': num_victory_cards,
@@ -26,6 +32,13 @@ class Board():
 		self.action_cards.sort(reverse=True, key=lambda e : e['cost'])
 
 	def take_card(self, to_take):
+		"""
+		Takes a card off the board
+
+		:param      to_take:  Card to be removed
+		:type       to_take:  String
+
+		"""
 		if to_take in self.num_cards:
 			# We don't have an action card
 			if self.num_cards[to_take] < 1:
