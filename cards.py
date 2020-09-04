@@ -332,9 +332,193 @@ action = {
 		'name': "Workshop",
 		'cost': 3,
 		'description': "Gain a card costing up to 4 Treasure",
-		'execute': ''
+		'execute': workshop()
 	}
 }
+
+########################################################################
+# ACTION FUNCTIONS
+########################################################################
+
+def artisan(player, board):
+	"""
+	Gain a card to your hand costing up to 5 treasure. Put a card from your
+	hand onto your deck
+	"""
+	pass
+	
+def bandit(player, board):
+	"""
+	Gain a Gold Each other player reveals the top 2 cards of their deck,
+	trashes a revealed Treasure other than Copper, and discards the rest
+	"""
+	pass
+	
+def bureaucrat(player, board):
+	"""
+	Gain a silver onto your deck. Each other player reveals a Victory card
+		 from their hand and puts it onto their deck (or reveals a hand with 
+		 no Victory cards)
+	"""
+	pass
+	
+def cellar(player, board):
+	"""
+	Action: 1
+	Discard any number of cards, then draw that many
+	"""
+	pass
+	
+def chapel(player, board):
+	"""
+	Trash up to 4 cards from your hand
+	"""
+	pass
+	
+def council_room(player, board):
+	"""
+	Draw 4
+	Buy + 1
+	Each other player draws a card
+	"""
+	pass
+
+def festival(player, board):
+	"""
+	Buy + 1
+	Action + 2
+	+ $2
+	"""
+	pass
+
+def harbinger(player, board):
+	"""
+	"Look through your discard pile. You may put a card from it onto your deck
+	Draw 1
+	Action + 1
+	"""
+	pass
+
+def laboratory(player, board):
+	"""
+	Draw 2
+	Action + 1
+	"""
+	pass
+
+def library(player, board):
+	"""
+	Draw until you have 7 cards in hand, skipping any Action cards
+		 you choose to; set those aside, discarding them
+	"""
+	pass
+
+def market(player, board):
+	"""
+	Draw 1
+	Actions + 1
+	Buy + 1
+	+ $1
+	"""
+	pass
+
+def merchant(player, board):
+	"""
+	The first time you play a Silver this turn + 1 treasure
+	Draw 1
+	Actions + 1
+	"""
+	pass
+
+def militia(player, board):
+	"""
+	Each other player discards down to 3 cards
+	+ $2
+	"""
+	pass
+
+def mine(player, board):
+	"""
+	You may trash a Treasure from your hand.  Gain
+		a Treasure to your hand costing up to 3 treasure more than
+	"""
+	pass
+
+def moat(player, board):
+	"""
+	When another player plays an Attack card, you 
+		may first reveal this from your hand, to be unaffected by it
+	Draw 2
+	"""
+	pass
+
+def moneylender(player, board):
+	"""
+	You may trash a Copper from your hand for +3
+	"""
+	pass
+
+def poacher(player, board):
+	"""
+	Discard a card per empty Supply pile
+	Draw 1
+	Action + 1
+	+ $1
+	"""
+	pass
+
+def remodel(player, board):
+	"""
+	Trash a card from your hand. Gain a card costing up to 2 Treasure more than it.
+	"""
+	pass
+
+def sentry(player, board):
+	"""
+	Look at the top 2 cards of your deck.  Trash and/or discard any number of them.  Put the rest back on top in any order
+	"""
+	pass
+
+def smithy(player, board):
+	"""
+	Draw 3
+	"""
+	pass
+
+def throne_room(player, board):
+	"""
+	You may play an Action card from your hand twice
+	"""
+	pass
+
+def vassal(player, board):
+	"""
+	Discard the top card of your deck.  If it's an Action card, you may play it
+	+ $2
+	"""
+	pass
+
+def vassal(player, board):
+	"""
+	Draw 1
+	Actions + 2
+	"""
+	pass
+
+def witch(player, board):
+	"""
+	Each other player gains a Curse
+	Draw 2
+	"""
+	pass
+
+def workshop(player, board):
+	"""
+	Gain a card costing up to 4 Treasure
+	"""
+	pass
+
+
 
 
 #################################################################
