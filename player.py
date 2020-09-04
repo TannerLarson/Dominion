@@ -27,11 +27,13 @@ class Player():
 
 		:raises     AssertionError:  Draw pile must have cards in it
 		"""
+		print('Draw pile: {}'.format(self.draw_pile))
 		for i in range(num):
 			assert len(self.draw_pile) > 0, "Can't draw from empty draw pile"
 			self.hand.append(self.draw_pile.pop())
 			if len(self.draw_pile) <= 0:
 				self.discard_to_draw()
+
 
 	def discard_to_draw(self):
 		"""
@@ -39,11 +41,12 @@ class Player():
 
 		:raises     AssertionError:  Draw pile must be empty
 		"""
+		print("Reshuffling discard into draw")
+		print(self.discard_pile)
 		assert len(self.draw_pile) == 0, "Draw pile should be empty"
 		self.draw_pile = self.discard_pile
 		random.shuffle(self.draw_pile)
 		self.discard_pile = []
-		print(self.draw_pile)
 
 	def buy(self, to_buy, treasure_used = []):
 		"""
@@ -55,7 +58,8 @@ class Player():
 		:type       to_buy:         String: 'moat' / 'province'
 		"""
 		self.alter_hand(treasure_used)
-		self.discard(treasure_used.append(to_buy))
+		treasure_used.append(to_buy)
+		self.discard(treasure_used)
 		self.num_buys -= 1
 
 	def alter_hand(self, to_remove = [], to_add = None):
@@ -83,7 +87,6 @@ class Player():
 		self.discard(self.hand)
 		self.hand = []
 		self.draw(5)
-		#self.draw(5)
 
 	def display_hand(self):
 		"""
@@ -109,6 +112,5 @@ class Player():
 		:param      to_discard:  List of cards to send to discard pile
 		:type       to_discard:  List: [copper, copper, moat]
 		"""
-		print("discarding: {}".format(to_discard))
 		if to_discard is not None:
 			self.discard_pile += to_discard

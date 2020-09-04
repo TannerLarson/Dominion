@@ -20,7 +20,7 @@ def print_action_details(card_name):
 	:param      card_name:  The card name
 	:type       card_name:  String
 	"""
-	if card_name in dictionary:
+	if card_name in dictionary and dictionary[card_name]['type'] == 'action':
 		print('\033[96m') # Make the card cyan
 		print("Name: {}".format(action[card_name]['name']))
 		print("Cost: {}".format(action[card_name]['cost']))
@@ -29,7 +29,7 @@ def print_action_details(card_name):
 		# End coloring
 		print('\033[0m')
 	else:
-		print("Card not found!")
+		print("Action card not found!")
 	print()
 
 def get_type(card_key):

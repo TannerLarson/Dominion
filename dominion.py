@@ -38,7 +38,7 @@ def main():
 	random.shuffle(play_order)
 	i_play_order = 0
 	while not game_done:
-		board.display()
+		#board.display()
 		print(Color.RED + "Player {}'s turn".format(play_order[i_play_order]) + Color.END)
 		current_player = players[play_order[i_play_order]-1]
 		current_player.display_hand()
@@ -156,7 +156,7 @@ def main():
 
 		# Clean up
 		current_player.reset()
-		i_play_order += 1
+		i_play_order = 0 if i_play_order + 1 >= num_players else i_play_order + 1
 
 		#game_done = True
 
