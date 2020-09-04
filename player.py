@@ -92,17 +92,19 @@ class Player():
 		"""
 		Displays hand
 		"""
+		i = 1
 		print("Hand:")
 		for card in self.hand:
 			card_actual = cards.dictionary[card]
 			if card_actual['type'] == 'action':
-				print(Color.CYAN + card_actual['name'] + Color.END)
+				print(str(i) + '. ' + Color.CYAN + card_actual['name'] + Color.END)
 			elif card_actual['type'] == 'treasure':
-				print(Color.YELLOW + card_actual['name'] + " ${}".format(card_actual['value']) + Color.END)
+				print(str(i) + '. ' + Color.YELLOW + card_actual['name'] + " ${}".format(card_actual['value']) + Color.END)
 			elif card_actual['type'] == 'victory':
-				print(Color.GREEN + card_actual['name'] + Color.END)
+				print(str(i) + '. ' + Color.GREEN + card_actual['name'] + Color.END)
 			else:
 				print(card_actual['name'])
+			i += 1
 		print()
 
 	def discard(self, to_discard):

@@ -38,7 +38,7 @@ def main():
 	random.shuffle(play_order)
 	i_play_order = 0
 	while not game_done:
-		#board.display()
+		board.display()
 		print(Color.RED + "Player {}'s turn".format(play_order[i_play_order]) + Color.END)
 		current_player = players[play_order[i_play_order]-1]
 		current_player.display_hand()
@@ -79,11 +79,17 @@ def main():
 
 		# Buy phase
 		while 1:
-			choice = int(input('Choose an option:\n1. Show board\n2. Show hand\n3. Read ' + Color.CYAN 
+			choice = None
+			while choice is None:
+				try:
+					choice = int(input('Choose an option:\n1. Show board\n2. Show hand\n3. Read ' + Color.CYAN 
 					 + 'action' + Color.END + ' card description\n4. Buy card ({} buys left)\n5. End turn\n>> '
-					 .format(current_player.num_buys)))
-			while not 0 < choice < 6:
-				choice = input("Please input a number: ")
+						.format(current_player.num_buys)))
+					if not 0 < choice < 6:
+						choice = None
+						raise ValueError()
+				except ValueError:
+					print("ERROR: Please input a number between 1 and 5: ")
 
 			if choice == 1:
 				board.display()
