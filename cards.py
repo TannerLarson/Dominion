@@ -114,231 +114,7 @@ victory = {
 # Base
 ####################################################################
 
-action = {
-
-	'artisan': {
-		'name': "Artisan",
-		'cost': 6,
-		'description': "Gain a card to your hand costing up to 5"
-			" treasure.\nPut a card from your hand onto your deck.",
-		'execute': ''
-	},
-
-	'bandit': {
-		'name': "Bandit",
-		'cost': 5,
-		'description': "Gain a Gold\n\
-			Each other player reveals the top 2 cards of their deck, "
-			"trashes a revealed Treasure other than Copper, and discards"
-			"the rest.",
-		'execute': ''
-	},
-
-	'bureaucrat': {
-		'name': "Bureaucrat",
-		'cost': 4,
-		'description': "Gain a silver onto your deck.\nEach other "
-			"player reveals a Victory card from their hand and puts it onto "
-			"their deck (or reveals a hand with no Victory cards).",
-		'execute': ''
-	},
-
-	'cellar': {
-		'name': "Cellar",
-		'cost': 2,
-		'description': "Discard any number of cards, then draw that many.",
-		'execute': '',
-		'action': 1
-	},
-
-	'chapel': {
-		'name': "Chapel",
-		'cost': 2,
-		'description': "Trash up to 4 cards from your hand.",
-		'execute': ''
-	},
-
-	'council_room': {
-		'name': "Council Room",
-		'cost': 5,
-		'description': "Each other player draws a card.",
-		'execute': '',
-		'draw': 4,
-		'buy': 1
-	},
-
-	'festival': {
-		'name': "Festival",
-		'cost': 5,
-		'description': "",
-		'action': 2,
-		'buy': 1,
-		'value': 2
-	},
-
-	'harbinger': {
-		'name': "Harbinger",
-		'cost': 3,
-		'description': "Look through your discard pile.\nYou may put a "
-		"card from it onto your deck.",
-		'execute': '',
-		'draw': 1,
-		'action': 1
-	},
-
-	'laboratory': {
-		'name': "Laboratory",
-		'cost': 5,
-		'description': "",
-		'execute': '',
-		'draw': 2,
-		'action': 1
-	},
-
-	'library': {
-		'name': "Library",
-		'cost': 5,
-		'description': "Draw until you have 7 cards in hand, skipping any"
-		"Action cards you choose to; set those aside, discarding them "
-		"afterwards",
-		'execute': ''
-	},
-
-	'market': {
-		'name': "Market",
-		'cost': 5,
-		'description': "",
-		'execute': '',
-		'draw': 1,
-		'action': 1,
-		'buy': 1,
-		'value': 1
-	},
-
-	'merchant': {
-		'name': "Merchant",
-		'cost': 3,
-		'description': "The first time you play a Silver this turn, "
-		"+1 Treasure",
-		'execute': '',
-		'draw': 1,
-		'action': 1
-	},
-
-	'militia': {
-		'name': "Militia",
-		'cost': 4,
-		'description': "Each other player discards down to 3 cards "
-		"in hand.",
-		'execute': '',
-		'value': 2
-	},
-
-	'mine': {
-		'name': "Mine",
-		'cost': 5,
-		'description': "You may trash a Treasure from your hand.  Gain"
-		" a Treasure to your hand costing up to 3 treasure more than"
-		" it.",
-		'execute': ''
-	},
-
-	'moat': {
-		'name': "Moat",
-		'cost': 2,
-		'description': "When another player plays an Attack card, you "
-		"may first reveal this from your hand, to be unaffected by it.",
-		'execute': '',
-		'draw': 2
-	},
-
-	'moneylender': {
-		'name': "Moneylender",
-		'cost': 4,
-		'description': "You may trash a Copper from your hand for +3"
-		" Treasure.",
-		'execute': ''
-	},
-
-	'poacher': {
-		'name': "Poacher",
-		'cost': 4,
-		'description': "Discard a card per empty Supply pile.",
-		'execute': '',
-		'draw': 1,
-		'action': 1,
-		'value': 1
-	},
-
-	'remodel': {
-		'name': "Remodel",
-		'cost': 4,
-		'description': "Trash a card from your hand. Gain a card "
-		"costing up to 2 Treasure more than it.",
-		'execute': ''
-	},
-
-	'sentry': {
-		'name': "Sentry",
-		'cost': 5,
-		'description': "Look at the top 2 cards of your deck.  Trash "
-		"and/or discard any number of them.  Put the rest back on top"
-		" in any order.",
-		'execute': ''
-	},
-
-	'smithy': {
-		'name': "Smithy",
-		'cost': 4,
-		'description': "",
-		'execute': '',
-		'draw': 3
-	},
-
-	'throne_room': {
-		'name': "Throne Room",
-		'cost': 4,
-		'description': "You may play an Action card from your hand twice.",
-		'execute': ''
-	},
-
-	'vassal': {
-		'name': "Vassal",
-		'cost': 3,
-		'description': "Discard the top card of your deck.  If it's an "
-		"Action card, you may play it.",
-		'execute': '',
-		'value': 2
-	},
-
-	'village': {
-		'name': "Village",
-		'cost': 3,
-		'description': "",
-		'execute': '',
-		'draw': 1,
-		'action': 2
-	},
-
-	'witch': {
-		'name': "Witch",
-		'cost': 5,
-		'description': "Each other player gains a Curse",
-		'execute': '',
-		'draw': 2
-	},
-
-	'workshop': {
-		'name': "Workshop",
-		'cost': 3,
-		'description': "Gain a card costing up to 4 Treasure",
-		'execute': workshop()
-	}
-}
-
-########################################################################
 # ACTION FUNCTIONS
-########################################################################
 
 def artisan(player, board):
 	"""
@@ -498,7 +274,7 @@ def vassal(player, board):
 	"""
 	pass
 
-def vassal(player, board):
+def village(player, board):
 	"""
 	Draw 1
 	Actions + 2
@@ -517,6 +293,205 @@ def workshop(player, board):
 	Gain a card costing up to 4 Treasure
 	"""
 	pass
+
+# Action dictionary
+
+action = {
+
+	'artisan': {
+		'name': "Artisan",
+		'cost': 6,
+		'description': "Gain a card to your hand costing up to 5"
+			" treasure.\nPut a card from your hand onto your deck.",
+		'execute': artisan
+	},
+
+	'bandit': {
+		'name': "Bandit",
+		'cost': 5,
+		'description': "Gain a Gold\n\
+			Each other player reveals the top 2 cards of their deck, "
+			"trashes a revealed Treasure other than Copper, and discards"
+			"the rest.",
+		'execute': bandit
+	},
+
+	'bureaucrat': {
+		'name': "Bureaucrat",
+		'cost': 4,
+		'description': "Gain a silver onto your deck.\nEach other "
+			"player reveals a Victory card from their hand and puts it onto "
+			"their deck (or reveals a hand with no Victory cards).",
+		'execute': bureaucrat
+	},
+
+	'cellar': {
+		'name': "Cellar",
+		'cost': 2,
+		'description': "Discard any number of cards, then draw that many.",
+		'execute': cellar
+	},
+
+	'chapel': {
+		'name': "Chapel",
+		'cost': 2,
+		'description': "Trash up to 4 cards from your hand.",
+		'execute': chapel
+	},
+
+	'council_room': {
+		'name': "Council Room",
+		'cost': 5,
+		'description': "Each other player draws a card.",
+		'execute': council_room
+	},
+
+	'festival': {
+		'name': "Festival",
+		'cost': 5,
+		'description': "",
+		'execute': festival
+	},
+
+	'harbinger': {
+		'name': "Harbinger",
+		'cost': 3,
+		'description': "Look through your discard pile.\nYou may put a "
+		"card from it onto your deck.",
+		'execute': harbinger
+	},
+
+	'laboratory': {
+		'name': "Laboratory",
+		'cost': 5,
+		'description': "",
+		'execute': laboratory
+	},
+
+	'library': {
+		'name': "Library",
+		'cost': 5,
+		'description': "Draw until you have 7 cards in hand, skipping any"
+		"Action cards you choose to; set those aside, discarding them "
+		"afterwards",
+		'execute': library
+	},
+
+	'market': {
+		'name': "Market",
+		'cost': 5,
+		'description': "",
+		'execute': market
+	},
+
+	'merchant': {
+		'name': "Merchant",
+		'cost': 3,
+		'description': "The first time you play a Silver this turn, "
+		"+1 Treasure",
+		'execute': merchant
+	},
+
+	'militia': {
+		'name': "Militia",
+		'cost': 4,
+		'description': "Each other player discards down to 3 cards "
+		"in hand.",
+		'execute': militia
+	},
+
+	'mine': {
+		'name': "Mine",
+		'cost': 5,
+		'description': "You may trash a Treasure from your hand.  Gain"
+		" a Treasure to your hand costing up to 3 treasure more than"
+		" it.",
+		'execute': mine
+	},
+
+	'moat': {
+		'name': "Moat",
+		'cost': 2,
+		'description': "When another player plays an Attack card, you "
+		"may first reveal this from your hand, to be unaffected by it.",
+		'execute': moat
+	},
+
+	'moneylender': {
+		'name': "Moneylender",
+		'cost': 4,
+		'description': "You may trash a Copper from your hand for +3"
+		" Treasure.",
+		'execute': moneylender
+	},
+
+	'poacher': {
+		'name': "Poacher",
+		'cost': 4,
+		'description': "Discard a card per empty Supply pile.",
+		'execute': poacher
+	},
+
+	'remodel': {
+		'name': "Remodel",
+		'cost': 4,
+		'description': "Trash a card from your hand. Gain a card "
+		"costing up to 2 Treasure more than it.",
+		'execute': remodel
+	},
+
+	'sentry': {
+		'name': "Sentry",
+		'cost': 5,
+		'description': "Look at the top 2 cards of your deck.  Trash "
+		"and/or discard any number of them.  Put the rest back on top"
+		" in any order.",
+		'execute': sentry
+	},
+
+	'smithy': {
+		'name': "Smithy",
+		'cost': 4,
+		'description': "",
+		'execute': smithy
+	},
+
+	'throne_room': {
+		'name': "Throne Room",
+		'cost': 4,
+		'description': "You may play an Action card from your hand twice.",
+		'execute': throne_room
+	},
+
+	'vassal': {
+		'name': "Vassal",
+		'cost': 3,
+		'description': "Discard the top card of your deck.  If it's an "
+		"Action card, you may play it.",
+		'execute': vassal
+	},
+
+	'village': {
+		'name': "Village",
+		'cost': 3,
+		'description': "",
+		'execute': village
+	},
+
+	'witch': {
+		'name': "Witch",
+		'cost': 5,
+		'description': "Each other player gains a Curse",
+		'execute': witch
+	},
+
+	'workshop': {
+		'name': "Workshop",
+		'cost': 3,
+		'description': "Gain a card costing up to 4 Treasure",
+		'execute': workshop
+	}
+}
 
 
 
