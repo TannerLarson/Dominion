@@ -13,7 +13,7 @@ class Player():
 		self.discard_pile = []
 
 		self.draw_pile = ['copper','copper','copper','copper','copper', 
-			'copper','copper','estate','estate','estate'] # Last element in draw_pile list is the top of the deck
+			'copper','copper','copper','copper','copper'] # Last element in draw_pile list is the top of the deck
 		random.shuffle(self.draw_pile)
 		self.hand = self.draw_pile[:5]
 		self.draw_pile = self.draw_pile[5:]
@@ -24,12 +24,12 @@ class Player():
 
 		:param      num:             Number of cards to draw
 		:type       num:             int: 3 / 5
-
-		:raises     AssertionError:  Draw pile must have cards in it
 		"""
 		print('Draw pile: {}'.format(self.draw_pile))
 		for i in range(num):
-			assert len(self.draw_pile) > 0, "Can't draw from empty draw pile"
+			if len(self.draw_pile) <= 0:
+				print("Deck is empty!")
+				return
 			self.hand.append(self.draw_pile.pop())
 			if len(self.draw_pile) <= 0:
 				self.discard_to_draw()
@@ -42,7 +42,6 @@ class Player():
 		:raises     AssertionError:  Draw pile must be empty
 		"""
 		print("Reshuffling discard into draw")
-		print(self.discard_pile)
 		assert len(self.draw_pile) == 0, "Draw pile should be empty"
 		self.draw_pile = self.discard_pile
 		random.shuffle(self.draw_pile)
@@ -57,26 +56,18 @@ class Player():
 		:param      to_buy:         Card being bought
 		:type       to_buy:         String: 'moat' / 'province'
 		"""
-		self.alter_hand(treasure_used)
+		# Remove cards from hand
+		for card in treasure_used:
+			self.hand.remove(card)
+
+		# Discard cards
 		treasure_used.append(to_buy)
 		self.discard(treasure_used)
 		self.num_buys -= 1
 
-	def alter_hand(self, to_remove = [], to_add = None):
-		"""
-		Updates player hand with cards to add and remove
-		* TODO: Does not check if cards are in hand
-		
-		:param      to_remove:  List of cards to remove
-		:type       to_remove:  List: ['copper', 'silver', 'dutchy']
-		:param      to_add:     String of card to add
-		:type       to_add:     String: 'moat' / 'gold'
-		"""
-		for card in to_remove:
-			self.hand.remove(card)
-
-		if to_add is not None:
-			self.hand.append(to_add)
+	def use_action(self, card_name, other_players, board):
+		cards.action[card_name]['execute'](self, other_players, board)
+		self.discard(card_name)
 
 	def reset(self):
 		"""
@@ -111,8 +102,10 @@ class Player():
 		"""
 		Send a card to player discard pile
 
-		:param      to_discard:  List of cards to send to discard pile
-		:type       to_discard:  List: [copper, copper, moat]
+		:param      to_discard:  List or string of card(s) to send to discard pile
+		:type       to_discard:  List: [copper, copper, moat] / 'gold'
 		"""
-		if to_discard is not None:
+		if isinstance(to_discard, list):
 			self.discard_pile += to_discard
+		elif isinstance(to_discard, str):
+			self.discard_pile.append(to_discard)

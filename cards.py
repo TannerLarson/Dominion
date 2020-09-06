@@ -116,21 +116,21 @@ victory = {
 
 # ACTION FUNCTIONS
 
-def artisan(player, board):
+def artisan(player, other_players, board):
 	"""
 	Gain a card to your hand costing up to 5 treasure. Put a card from your
 	hand onto your deck
 	"""
 	pass
 	
-def bandit(player, board):
+def bandit(player, other_players, board):
 	"""
 	Gain a Gold Each other player reveals the top 2 cards of their deck,
 	trashes a revealed Treasure other than Copper, and discards the rest
 	"""
 	pass
 	
-def bureaucrat(player, board):
+def bureaucrat(player, other_players, board):
 	"""
 	Gain a silver onto your deck. Each other player reveals a Victory card
 		 from their hand and puts it onto their deck (or reveals a hand with 
@@ -138,20 +138,34 @@ def bureaucrat(player, board):
 	"""
 	pass
 	
-def cellar(player, board):
+def cellar(player, other_players, board):
 	"""
 	Action: 1
 	Discard any number of cards, then draw that many
 	"""
 	pass
 	
-def chapel(player, board):
+def chapel(player, other_players, board):
 	"""
 	Trash up to 4 cards from your hand
 	"""
-	pass
+	for i in range(4):
+		player.display_hand()
+		choice = None
+		while choice is None:
+			try:
+				choice = int(input("Select number of card you want to trash (0 to quit): "))
+				if not 0 <= choice < len(player.hand):
+					choice = None
+					raise ValueError()
+			except ValueError:
+				print("ERROR: Please input a number between 0 and {}: ".format(len(player.hand)))
+		if choice == 0:
+			return
+		player.hand.pop(choice-1)
+
 	
-def council_room(player, board):
+def council_room(player, other_players, board):
 	"""
 	Draw 4
 	Buy + 1
@@ -159,7 +173,7 @@ def council_room(player, board):
 	"""
 	pass
 
-def festival(player, board):
+def festival(player, other_players, board):
 	"""
 	Buy + 1
 	Action + 2
@@ -167,7 +181,7 @@ def festival(player, board):
 	"""
 	pass
 
-def harbinger(player, board):
+def harbinger(player, other_players, board):
 	"""
 	"Look through your discard pile. You may put a card from it onto your deck
 	Draw 1
@@ -175,21 +189,22 @@ def harbinger(player, board):
 	"""
 	pass
 
-def laboratory(player, board):
+def laboratory(player, other_players, board):
 	"""
 	Draw 2
 	Action + 1
 	"""
-	pass
+	player.draw(2)
+	player.num_actions += 1
 
-def library(player, board):
+def library(player, other_players, board):
 	"""
 	Draw until you have 7 cards in hand, skipping any Action cards
 		 you choose to; set those aside, discarding them
 	"""
 	pass
 
-def market(player, board):
+def market(player, other_players, board):
 	"""
 	Draw 1
 	Actions + 1
@@ -198,7 +213,7 @@ def market(player, board):
 	"""
 	pass
 
-def merchant(player, board):
+def merchant(player, other_players, board):
 	"""
 	The first time you play a Silver this turn + 1 treasure
 	Draw 1
@@ -206,21 +221,21 @@ def merchant(player, board):
 	"""
 	pass
 
-def militia(player, board):
+def militia(player, other_players, board):
 	"""
 	Each other player discards down to 3 cards
 	+ $2
 	"""
 	pass
 
-def mine(player, board):
+def mine(player, other_players, board):
 	"""
 	You may trash a Treasure from your hand.  Gain
 		a Treasure to your hand costing up to 3 treasure more than
 	"""
 	pass
 
-def moat(player, board):
+def moat(player, other_players, board):
 	"""
 	When another player plays an Attack card, you 
 		may first reveal this from your hand, to be unaffected by it
@@ -228,13 +243,13 @@ def moat(player, board):
 	"""
 	pass
 
-def moneylender(player, board):
+def moneylender(player, other_players, board):
 	"""
 	You may trash a Copper from your hand for +3
 	"""
 	pass
 
-def poacher(player, board):
+def poacher(player, other_players, board):
 	"""
 	Discard a card per empty Supply pile
 	Draw 1
@@ -243,52 +258,52 @@ def poacher(player, board):
 	"""
 	pass
 
-def remodel(player, board):
+def remodel(player, other_players, board):
 	"""
 	Trash a card from your hand. Gain a card costing up to 2 Treasure more than it.
 	"""
 	pass
 
-def sentry(player, board):
+def sentry(player, other_players, board):
 	"""
 	Look at the top 2 cards of your deck.  Trash and/or discard any number of them.  Put the rest back on top in any order
 	"""
 	pass
 
-def smithy(player, board):
+def smithy(player, other_players, board):
 	"""
 	Draw 3
 	"""
 	pass
 
-def throne_room(player, board):
+def throne_room(player, other_players, board):
 	"""
 	You may play an Action card from your hand twice
 	"""
 	pass
 
-def vassal(player, board):
+def vassal(player, other_players, board):
 	"""
 	Discard the top card of your deck.  If it's an Action card, you may play it
 	+ $2
 	"""
 	pass
 
-def village(player, board):
+def village(player, other_players, board):
 	"""
 	Draw 1
 	Actions + 2
 	"""
 	pass
 
-def witch(player, board):
+def witch(player, other_players, board):
 	"""
 	Each other player gains a Curse
 	Draw 2
 	"""
 	pass
 
-def workshop(player, board):
+def workshop(player, other_players, board):
 	"""
 	Gain a card costing up to 4 Treasure
 	"""

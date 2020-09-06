@@ -71,7 +71,24 @@ def main():
 				else:
 					print("Card not found!")
 			elif choice == 4:
-				pass
+				i_action = None
+				while i_action is None:
+					try:
+						i_action = int(input('Please input the number of the action card you want to use (0 to cancel): ')) - 1
+						if not -1 <= i_action < len(current_player.hand):
+							i_action = None
+							raise ValueError()
+						if i_action != -1 and cards.dictionary[current_player.hand[i_action]]['type'] != 'action':
+							i_action = None
+							raise CardTypeError()
+					except ValueError:
+							print("ERROR: Please input a number between 1 and {}: ".format(len(current_player.hand)))
+					except CardTypeError:
+						print("Selected card is not an action card!")
+				if i_action == -1:
+					print()
+					continue
+				current_player.use_action(current_player.hand[i_action], players, board)
 			elif choice == 5:
 				print()
 				break
@@ -114,7 +131,7 @@ def main():
 					print("Total treasure: " + Color.YELLOW + "${}".format(total_money) + Color.END)
 					to_buy = input("Card to buy: ").lower()
 					# If card is available
-					if to_buy in board.available_cards():
+					if to_buy in cards.dictionary: #board.available_cards():				PUT THIS LINE BACK IN WHEN DONE TESTING
 						# Check if player has enough treasure to purchase
 						if cards.dictionary[to_buy]['cost'] > total_money:
 							print(Color.RED + "Not enough treasure!" + Color.END)
@@ -136,7 +153,7 @@ def main():
 							while to_spend is None:
 								try:
 									to_spend = int(input(">> "))
-									if 0 > to_spend > len(treasure_in_hand):
+									if not 0 < to_spend <= len(treasure_in_hand):
 										to_spend = None
 										raise ValueError
 								except ValueError:
@@ -165,6 +182,15 @@ def main():
 		i_play_order = 0 if i_play_order + 1 >= num_players else i_play_order + 1
 
 		#game_done = True
+
+
+class CardTypeError(Exception):
+	"""
+	Error type that occurs when the wrong card is used (i.e. when a player attempts
+		to play a treasure card like an action card)
+	"""
+	def __init__(self):
+		pass
 
 if __name__ == "__main__":
     main()
