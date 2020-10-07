@@ -11,7 +11,7 @@ from cards import Color
 from player import Player
 from board import Board
 
-import random, cards
+import random, cards, actions
 
 
 def main():
@@ -49,13 +49,13 @@ def main():
 			while choice is None:
 				try:
 					choice = int(input('Choose an option:\n1. Show board\n2. Show hand\n3. Read ' + Color.CYAN 
-					 	+ 'action' + Color.END + ' card description\n4. Use action ({} actions left)\n5. End action phase\n>> '
+					 	+ 'action' + Color.END + ' card description\n4. Use action ({} actions left)\n5. Undo last move\n6. End action phase\n>> '
 						.format(current_player.num_actions)))
-					if not 0 < choice < 6:
+					if not 0 < choice <= 6:
 						choice = None
 						raise ValueError()
 				except ValueError:
-					print("ERROR: Please input a number between 1 and 5: ")
+					print("ERROR: Please input a number between 1 and 6: ")
 
 			if choice == 1:
 				board.display()
@@ -90,6 +90,8 @@ def main():
 					continue
 				current_player.use_action(current_player.hand[i_action], players, board)
 			elif choice == 5:
+				print('Undo!')
+			elif choice == 6:
 				print()
 				break
 			print()
@@ -100,13 +102,13 @@ def main():
 			while choice is None:
 				try:
 					choice = int(input('Choose an option:\n1. Show board\n2. Show hand\n3. Read ' + Color.CYAN 
-					 + 'action' + Color.END + ' card description\n4. Buy card ({} buys left)\n5. End turn\n>> '
+					 + 'action' + Color.END + ' card description\n4. Buy card ({} buys left)\n5. Undo last move\n6. End turn\n>> '
 						.format(current_player.num_buys)))
-					if not 0 < choice < 6:
+					if not 0 < choice <= 6:
 						choice = None
 						raise ValueError()
 				except ValueError:
-					print("ERROR: Please input a number between 1 and 5: ")
+					print("ERROR: Please input a number between 1 and 6: ")
 
 			if choice == 1:
 				board.display()
@@ -173,12 +175,14 @@ def main():
 				else:
 					print("No buys left!")
 			elif choice == 5:
+				print("Undoing")
+			elif choice == 6:
 				print()
 				break
 			print()
 
 		# Clean up
-		current_player.reset()
+		current_player.reset_hand()
 		i_play_order = 0 if i_play_order + 1 >= num_players else i_play_order + 1
 
 		#game_done = True
