@@ -115,6 +115,7 @@ victory = {
 ####################################################################
 
 # ACTION FUNCTIONS
+# Actions return True if not canceled, otherwise returns False
 
 def artisan(player, other_players, board):
 	"""
@@ -149,6 +150,9 @@ def chapel(player, other_players, board):
 	"""
 	Trash up to 4 cards from your hand
 	"""
+	hand_temp = player.hand
+	player.hand.remove('chapel')
+
 	for i in range(4):
 		player.display_hand()
 		choice = None
@@ -161,6 +165,7 @@ def chapel(player, other_players, board):
 			except ValueError:
 				print("ERROR: Please input a number between 0 and {}: ".format(len(player.hand)))
 		if choice == 0:
+			player.hand = hand_temp
 			return
 		player.hand.pop(choice-1)
 

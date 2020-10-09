@@ -16,8 +16,13 @@ class Command(ABC):
 	def unexecute(self) -> None:
 		pass
 
-
+'''
+# These classes are used internally and I get the feeling we only want one invoker in dominion,
+#	we don't want to pass our invoker around.
 class Draw(Command):
+	"""
+	This class describes a draw command.
+	"""
 
 	def __init__(self, player: Player, num = 1):
 		self._player = player
@@ -33,6 +38,9 @@ class Draw(Command):
 		print("putting drawn card back")
 
 class Discard(Command):
+	"""
+	This class describes a discard command
+	"""
 
 	def __init__(self, player: Player, to_discard: list):
 		self._player = player
@@ -46,43 +54,55 @@ class Discard(Command):
 
 	def unexecute(self):
 		print("undoing discard")
+'''
 
 class Buy(Command):
+	"""
+	This class describes a buy command.
+	"""
 
-	def __init__(self, player: Player, to_buy: str, treasure_used = []):
+	def __init__(self, player: Player, board: Board, to_buy: str, treasure_used = []):
+		self._board = board
 		self._player = player
 		self.to_buy = to_buy
 		self.treasure_used = treasure_used
 
 		# For unexecute
 		self.old_player = deepcopy(player)
+		self.old_board = deepcopy(board)
 
 	def execute(self):
 		self._player.buy(self.to_buy, self.treasure_used)
+		self._board.take_card(self.to_buy)
 
 	def unexecute(self):
 		print("undoing buy")
 
 class Use_action(Command):
+	"""
+	This class describes a use action command.
+	"""
 
-	def __init__(self, player: Player, board: Board, card_name: str, other_players: list):
-		self._player = player
+	def __init__(self, players: list, board: Board, i_current_player: int, card_name: str):
+		self._players = players
 		self._board = board
-		self._other_players = other_players
+		self.i_current_player = i_current_player
 		self.card_name = card_name
 
 		# For unexecute
-		self.old_player = deepcopy(player)
+		self.old_players = deepcopy(players)
 		self.old_board = deepcopy(board)
-		self.old_other_players = deepcopy(other_players)
 
 	def execute(self):
-		self._player.use_action(self.card_name, self._other_players, self._board)
+		player.use_action(self._players, self._board, self.i_current_player, self.card_name)
 
 	def unexecute(self):
 		print("undoing action")
 
 class Reset_hand(Command):
+	"""
+	This class describes a reset hand command.
+	"""
 
 	def __init__(self, player: Player):
 		self._player = player
@@ -100,16 +120,31 @@ class Reset_hand(Command):
 
 class Invoker:
 	"""
-	Ask the command to carry out the request
+	The invoker has three responsibilities:
+		1. Holds past commands and the states of the board and players on command creation
+		2. Call the execution of commands
+		3. Call the unexecution of previous commands
 	"""
 
 	def __init__(self):
 
 		self._commands = []
+		self._past_commands = []
 
-	def set_command(self, command):
+	def set_command(self, command: Command):
 		self._commands.append(command)
 
-	def exectue_commands(self):
-		for command in self._commands:
-			command.execute()
+	def execute_commands(self):
+		for i in range(len(self._commands)):
+			self._commands[i].execute()
+			self._past_commands.append(self._commands.pop(i))
+
+	def set_and_execute(self, command: Command):
+		self.set_command(command)
+		self.execute_commands()
+
+	def unexecute(self, num = 1):
+		for i in range(num):
+			self._past_commands[-1].unexecute()
+			self._past_commands.pop()
+

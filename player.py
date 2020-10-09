@@ -1,5 +1,4 @@
-import random
-import cards
+import random, copy, cards
 from cards import Color
 
 class Player():
@@ -27,15 +26,13 @@ class Player():
 		"""
 		print('Draw pile: {}'.format(self.draw_pile))
 		for i in range(num):
-			if len(self.draw_pile) <= 0:
-				print("Deck is empty!")
-				return
+			assert(len(self.draw_pile) > 0), "Length of deck before draw: {}".format(len(self.draw_pile))
 			self.hand.append(self.draw_pile.pop())
 			if len(self.draw_pile) <= 0:
-				self.discard_to_draw()
+				self.refill_deck()
 
 
-	def discard_to_draw(self):
+	def refill_deck(self):
 		"""
 		Shuffle discard pile and make it the deck
 
@@ -65,11 +62,7 @@ class Player():
 		self.discard(treasure_used)
 		self.num_buys -= 1
 
-	def use_action(self, card_name, other_players, board):
-		cards.action[card_name]['execute'](self, other_players, board)
-		self.discard(card_name)
-
-	def reset(self):
+	def reset_hand(self):
 		"""
 		Reset data for player when their turn ends
 		"""
@@ -78,6 +71,18 @@ class Player():
 		self.discard(self.hand)
 		self.hand = []
 		self.draw(5)
+
+	def discard(self, to_discard):
+		"""
+		Send a card to player discard pile
+
+		:param      to_discard:  List or string of card(s) to send to discard pile
+		:type       to_discard:  List: [copper, copper, moat] / 'gold'
+		"""
+		if isinstance(to_discard, list):
+			self.discard_pile += to_discard
+		elif isinstance(to_discard, str):
+			self.discard_pile.append(to_discard)
 
 	def display_hand(self):
 		"""
@@ -98,14 +103,8 @@ class Player():
 			i += 1
 		print()
 
-	def discard(self, to_discard):
-		"""
-		Send a card to player discard pile
-
-		:param      to_discard:  List or string of card(s) to send to discard pile
-		:type       to_discard:  List: [copper, copper, moat] / 'gold'
-		"""
-		if isinstance(to_discard, list):
-			self.discard_pile += to_discard
-		elif isinstance(to_discard, str):
-			self.discard_pile.append(to_discard)
+def use_action(players, board, i_current_player, card_name):
+		temp = [self, ]
+		cards.action[card_name]['execute'](self, other_players, board)
+		self.discard(card_name)
+		self.hand.remove(card_name)

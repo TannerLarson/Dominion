@@ -20,6 +20,7 @@ def main():
 	"""
 
 	# Set up game
+	invoker = actions.Invoker()
 	num_players = 2 #int(input("Number of players: "))
 	if num_players < 2:
 		print("Not enough players")
@@ -88,7 +89,7 @@ def main():
 				if i_action == -1:
 					print()
 					continue
-				current_player.use_action(current_player.hand[i_action], players, board)
+				invoker.set_and_execute(Use_action(players, board, play_order[i_play_order]-1, current_player.hand[i_action]))
 			elif choice == 5:
 				print('Undo!')
 			elif choice == 6:
@@ -167,8 +168,7 @@ def main():
 						# Confirm purchase and update board and player discard
 						confirm = input("Confirm purchase?(y,n): ")
 						if confirm == 'y':
-							current_player.buy(to_buy, treasure_used)
-							board.take_card(to_buy)
+							invoker.set_and_execute(actions.Buy(current_player, board, to_buy, treasure_used))
 
 					else:
 						print("Card not found")
@@ -182,7 +182,7 @@ def main():
 			print()
 
 		# Clean up
-		current_player.reset_hand()
+		invoker.set_and_execute(actions.Reset_hand(current_player))
 		i_play_order = 0 if i_play_order + 1 >= num_players else i_play_order + 1
 
 		#game_done = True
